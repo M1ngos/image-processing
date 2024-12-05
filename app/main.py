@@ -10,7 +10,6 @@ import face_recognition
 from pymongo import MongoClient
 from PIL import Image as PILImage
 
-
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
