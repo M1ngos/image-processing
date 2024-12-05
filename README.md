@@ -4,11 +4,10 @@ This project is focused on the accurate and efficient classification/Processing 
 
 
 # Build and start the services
-docker-compose up --build
+podman image build -t image-processing -f ContainerFile 
 
-# To run in detached mode
-docker-compose up -d --build
 
+podman run image-processing:latest  
 
 # To test the endpoint:
 curl -X POST -F "file=@/path/to/your/image.jpg" http://localhost:8000/upload
