@@ -1,4 +1,5 @@
 # app/main.py
+from typing import Union
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
 import os
