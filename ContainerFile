@@ -3,13 +3,19 @@ FROM python:3.9-slim
 
 LABEL maintainer="mingoemanuel07@gmail.com"
 
-WORKDIR /code
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libgtk2.0-dev \
+    cmake \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /code
+
 COPY ./requirements.txt /code/requirements.txt
+
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY ./app /code/app
@@ -18,4 +24,5 @@ RUN mkdir uploads
 
 EXPOSE 8000
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["sh", "-c", "mongod --fork --logpath /var/log/mongodb.log && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
