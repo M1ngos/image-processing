@@ -2,7 +2,7 @@
 from PIL import Image
 import face_recognition
 
-image_path = 'uploads/captured_image.jpg'
+image_path = '../../uploads/twist.jpg'
 
 try:
     # Open the image using Pillow and convert it to RGB
@@ -17,6 +17,7 @@ try:
 
     if face_encodings:
         print("Face encoding found!")
+        # print(face_encodings)
     else:
         print("No faces detected.")
 except Exception as e:
