@@ -8,6 +8,7 @@ import face_recognition
 from pymongo import MongoClient
 from scipy.spatial.distance import cosine
 from PIL import Image, ExifTags
+import numpy as np
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -82,42 +83,56 @@ async def upload_image(file: UploadFile = File(...)):
         
         # Check for matching face in database
         existing_faces = collection.find()
+        found_match = False
+        max_similarity = 0
+
         for face in existing_faces:
-            stored_encoding = face['features']
-            similarity = 1 - cosine(uploaded_encoding, stored_encoding)
-            
-            # If similarity is above a certain threshold, consider it a match
-            if similarity > 0.6:  # Adjust threshold as needed
-                logger.info(f"Matching face found for {filename}")
+            stored_encoding = np.array(face['features'])  # Convert stored list back to numpy array
+
+            # Use face_recognition's built-in comparison instead of cosine similarity
+            face_distances = face_recognition.face_distance([stored_encoding], uploaded_encoding)
+            similarity = 1 - face_distances[0]  # Convert distance to similarity
+
+            # Update maximum similarity found
+            max_similarity = max(max_similarity, similarity)
+
+            # If similarity is above threshold, consider it a match
+            if similarity > 0.6:  # Threshold adjusted (lower is stricter)
+                found_match = True
+                logger.info(f"Matching face found for {filename} with similarity={similarity:.3f}")
                 return JSONResponse(
                     content={
                         "message": "Face already exists in the database",
-                        "similarity": similarity
+                        "similarity": float(similarity),  # Convert numpy float to Python float
+                        "max_similarity_found": float(max_similarity)
                     },
                     status_code=409
                 )
-        
+
         # Store new face in database
         face_data = {
             "filename": filename,
-            "features": uploaded_encoding.tolist()  # Convert numpy array to list
+            "features": uploaded_encoding.tolist(),  # Convert numpy array to list
+            "upload_date": datetime.now()
         }
         collection.insert_one(face_data)
         logger.info(f"Stored new face data for: {filename}")
-        
+
         return JSONResponse(
             content={
                 "message": "Image uploaded and processed successfully",
-                "features_stored": True
+                "features_stored": True,
+                "max_similarity_found": float(max_similarity)  # Include highest similarity found
             },
             status_code=200
         )
-    
+
     except HTTPException as http_exc:
         raise http_exc
     except Exception as e:
         logger.error(f"Error processing image: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 def health_check():
     return {"status": "healthy"}
