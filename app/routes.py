@@ -76,8 +76,15 @@ async def upload_image(file: UploadFile = File(...)):
         face_encodings = face_recognition.face_encodings(image)
         
         if not face_encodings:
-            logger.info(f"No face detected in {filename}")
+            logger.info(f"No face detected in {filename}")   
+            return JSONResponse(
+                    content={
+                        "message": "No face detected in the image",
+                    },
+                    status_code=400
+                )
             raise HTTPException(status_code=400, detail="No face detected in the uploaded image")
+        
         
         uploaded_encoding = face_encodings[0]
         
