@@ -7,6 +7,11 @@ This project is focused on the accurate and efficient classification/Processing 
 -- Installing on Mac or Linux --
 First, make sure you have dlib already installed with Python bindings https://gist.github.com/ageitgey/629d75c1baac34dfa5ca2a1928a7aeaf :
 
+Also make sure you install tessaract(adapt to your target distro):
+sudo dnf install tesseract
+sudo dnf install tesseract-langpack-por
+
+
 
 ### Build and start the services
 
