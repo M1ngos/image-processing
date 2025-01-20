@@ -36,4 +36,4 @@ watchfiles==1.0.0
 websockets==14.1
 scipy==1.14.1
 
-#packaging-24.2 pytesseract-0.3.13
+# packaging-24.2 pytesseract-0.3.13
