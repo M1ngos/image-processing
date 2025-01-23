@@ -16,9 +16,6 @@ import pytesseract
 import uuid
 from fastapi.responses import StreamingResponse
 
-
-
-
 # Configure logging
 logger = logging.getLogger(__name__)
 
@@ -202,7 +199,7 @@ async def extract_data(front: UploadFile = File(...), back: UploadFile = File(..
     data = {
         "front_text": front_text,
         "back_text": back_text,
-        "face_image_url": f"/extract-data/face-image/{session_id}",  # URL includes the unique session ID
+        "face_image_url": f"/extract-data/face-image/{session_id}",
     }
 
     return JSONResponse({"data": data})
@@ -217,6 +214,3 @@ async def get_face_image(session_id: str):
     face_buffer = face_image_storage.pop(session_id)
 
     return StreamingResponse(face_buffer, media_type="image/jpeg")
-
-def health_check():
-    return {"status": "healthy"}

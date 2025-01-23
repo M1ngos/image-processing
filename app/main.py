@@ -1,6 +1,11 @@
 from fastapi import FastAPI
-from app.routes import upload_image, health_check, extract_data, get_face_image
-import logging
+from app.image_routes import upload_image, extract_data, get_face_image
+from app.main_routes import health_check
+from app.schemas.user_schema import LoginResponse
+from app.services.appointment_route import get_appointments
+from app.services.user_routes import login
+# from app.services.appointment_route import get_appointments
+import logging, os
 
 # Configure logging to show logs in the console
 logging.basicConfig(
@@ -12,11 +17,13 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Create the FastAPI app
-app = FastAPI(title="Image Upload Service w/ MongoDB")
+app = FastAPI(title="Mobile Data capture API w/ MongoDB")
 
 # Add routes
-app.post("/upload")(upload_image)
 app.get("/health")(health_check)
+app.get("/secure-endpoint")()
+app.post("/upload")(upload_image)
 app.post("/extract-data")(extract_data)
 app.get("/extract-data/face-image/{session_id}")(get_face_image)
-
+app.post("/auth/login", response_model=LoginResponse)(login)
+app.get("/driver/appointments")(get_appointments)
