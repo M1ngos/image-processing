@@ -1,20 +1,18 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.responses import JSONResponse
-import os
-from datetime import datetime
-import aiofiles
-import logging
-import face_recognition
-from pymongo import MongoClient
-from scipy.spatial.distance import cosine
-from PIL import Image, ExifTags
-import numpy as np
 import io
-import cv2
+import logging
+import os
 import re
+from datetime import datetime
+
+import aiofiles
+import face_recognition
+import numpy as np
 import pytesseract
-import uuid
+from PIL import Image, ExifTags
+from fastapi import UploadFile, File, HTTPException
+from fastapi.responses import JSONResponse
 from fastapi.responses import StreamingResponse
+from pymongo import MongoClient
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -59,10 +57,6 @@ def fix_orientation(image_path):
     except Exception as e:
         logger.error(f"Error fixing orientation: {e}")
 
-
-face_image_storage = {}
-
-
 async def upload_image(file: UploadFile = File(...)):
     try:
         # Validate file type
@@ -93,7 +87,7 @@ async def upload_image(file: UploadFile = File(...)):
                     },
                     status_code=400
                 )
-            raise HTTPException(status_code=400, detail="No face detected in the uploaded image")
+                # raise HTTPException(status_code=400, detail="No face detected in the uploaded image")
         
         
         uploaded_encoding = face_encodings[0]

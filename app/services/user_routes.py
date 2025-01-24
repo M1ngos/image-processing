@@ -31,6 +31,23 @@ async def login(request: LoginRequest):
                 "date_of_birth": request.date_of_birth,
             }
         }
+        
+    if request.license_id == "87654321" and request.date_of_birth == 977270400000:
+
+        # Create a token
+        token_data = {"sub": request.license_id}
+        token = create_access_token(data=token_data)
+        print("token:"+token)
+
+        return {
+            "token": token,
+            "driver": {
+                "id": 1,
+                "license_id": request.license_id,
+                "name": "John Doe",
+                "date_of_birth": request.date_of_birth,
+            }
+        }
 
     raise HTTPException(
         status_code=401,
