@@ -38,7 +38,13 @@ class Driver(BaseModel):
     id: int
     license_id: str
     name: str
-    date_of_birth: int  # Unix timestamp to match Android app
+    date_of_birth: int  # Unix timestamp
+    licence_number: str  # From "Licence No." in the sample
+    issue_number: int    # From "Issue No." in the sample
+    expiry_date: int     # Unix timestamp for "Validate" end date
+    place_of_issue: str  # From "Coloque da Cartas"
+    gender: str          # From "MASCULINO"
+    restrictions: str    # From "Restrictea ao Condutor"
 
     @property
     def formatted_date_of_birth(self) -> str:
@@ -51,7 +57,13 @@ class Driver(BaseModel):
                 "license_id": "12345678",
                 "name": "John Doe",
                 "date_of_birth": 977270400000,
-                "formatted_date_of_birth": "01.01.1980"
+                "formatted_date_of_birth": "01.01.1980",
+                "licence_number": "108497392",
+                "issue_number": 2,
+                "expiry_date": 1731283200000,  # 11/11/2024
+                "place_of_issue": "CE",
+                "gender": "MASCULINO",
+                "restrictions": "0"
             }
         }
 
