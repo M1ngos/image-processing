@@ -3,7 +3,7 @@ from app.image_routes import upload_image
 from app.main_routes import health_check
 from app.schemas.user_schema import LoginResponse
 from app.services.appointment_route import get_appointments
-from app.services.ocr import IDDataResponse, extract_id_data
+from app.services.id_ocr import IDDataResponse, extract_id_data
 from app.services.user_routes import login
 # from app.services.appointment_route import get_appointments
 import logging, os
@@ -28,4 +28,4 @@ app.post("/upload")(upload_image)
 # app.get("/extract-data/face-image/{session_id}")(get_face_image)
 app.post("/auth/login", response_model=LoginResponse)(login)
 app.get("/driver/appointments")(get_appointments)
-app.post("/extract-id-data/", response_model=IDDataResponse)(extract_id_data)
+app.post("/extract-id-data", response_model=IDDataResponse)(extract_id_data)
