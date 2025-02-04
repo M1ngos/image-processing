@@ -60,7 +60,6 @@ async def extract_id_data(
         # print(organized_front)
         logger.info("data :"+str(organized_front))
 
-        logger 
         return IDDataResponse(
             front_data=organized_front,
             # back_data=organized_back
